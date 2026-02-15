@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 
 const VoterListSchema = new mongoose.Schema({
+  number: { type: String, required: true },
   name: { type: String, required: true },
   phone: { type: String, default: "" },
   voterId: { type: String, required: true },
