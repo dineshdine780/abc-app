@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const protectUser = require("../middleware/protectUser");
 
 const router = express.Router();
 
@@ -49,17 +50,17 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    
+
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Your account is deactivated. Contact admin." });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: "user" },
-      process.env.JWT_SECRET,
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     res.json({
       token,
@@ -67,11 +68,20 @@ router.post("/login", async (req, res) => {
         id: user._id,
         name: user.name,
         phone: user.phone,
-      },
+        isActive: user.isActive
+      }
     });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
-}); 
+});
+
+
+router.get("/status-check", protectUser, async (req, res) => {
+  const user = await User.findById(req.user._id).select("isActive");
+  res.json({ isActive: user.isActive });
+});
+
+
 
 module.exports = router;

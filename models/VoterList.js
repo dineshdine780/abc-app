@@ -8,6 +8,10 @@ const VoterListSchema = new mongoose.Schema({
   voterId: { type: String, required: true },
   boothNo: { type: String, required: true },
   comment: { type: String, required: true },
+  q1: { type: String, default: "" },
+  q2: { type: String, default: "" },
+  q3: { type: String, default: "" },
+  q4: { type: String, default: "" },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
   locationName: { type: String, required: true },
@@ -24,5 +28,3 @@ const VoterListSchema = new mongoose.Schema({
 VoterListSchema.index({ submittedBy: 1 });
 
 module.exports = mongoose.model("VoterList", VoterListSchema);
-
-

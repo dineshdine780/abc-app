@@ -10,19 +10,21 @@ const protectUser = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-
     const secret = process.env.JWT_SECRET || "MY_SUPER_SECRET";
 
     const decoded = jwt.verify(token, secret);
 
+    
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    // REMOVE isActive check (your model does not have it)
-    // If you want to use it later, add it to your model first.
+    
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Account deactivated by admin" });
+    }
 
     req.user = user;
     next();
