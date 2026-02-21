@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    phone: {
+     phone: {
       type: String,
       required: true,
       unique: true,
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     isActive: {
     type: Boolean,
     default: true   
-  }
+  } 
   },
 );
 

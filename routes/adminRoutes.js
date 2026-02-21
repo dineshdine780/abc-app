@@ -35,7 +35,7 @@ router.put("/toggle-user/:id", async (req, res) => {
 router.get("/voters-by-user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-
+    
     const voters = await VoterList.find({ submittedBy: userId })
       .sort({ createdAt: -1 });
 

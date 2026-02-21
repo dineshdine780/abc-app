@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const userAuthRoutes = require("./routes/userAuthRoutes");
 const voterRoutes = require("./routes/voterRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const helmet = require("helmet");
 
 dotenv.config();
 connectDB();
@@ -14,6 +15,7 @@ const app = express();
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 
 app.use("/api/users", userAuthRoutes);
